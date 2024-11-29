@@ -3,7 +3,7 @@ version: "3.3"
 services:
   fic-python-backend:
     build:
-      context: ../python-backend/
+      context: ../backend/
       dockerfile: Dockerfile
     restart: always
     environment:
