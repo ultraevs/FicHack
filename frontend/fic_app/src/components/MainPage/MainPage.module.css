@@ -1,0 +1,64 @@
+.mainPage {
+    margin-top: 30px;
+}
+
+.flexbox {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.content button {
+    margin-top: 330px;
+}
+
+.title {
+    font-size: 58px;
+    color: #000;
+    font-family: "SF Pro", sans-serif;
+    font-weight: 700;
+
+    span {
+        color: #0B68EF;
+    }
+}
+
+.subtitle {
+    font-size: 48px;
+    color: #000;
+    font-family: "SF Pro", sans-serif;
+    font-weight: 500;
+    margin: 10px 0 45px;
+    max-width: 727px;
+}
+
+.team {
+    display: block;
+    color: #52525B;
+    font-size: 18px;
+    max-width: 530px;
+}
+
+.promoImage {
+    margin-top: 120px;
+}
+
+@media screen and (max-height: 1000px) {
+    .promoImage {
+        margin-top: 0px;
+    }
+
+    .content button {
+        margin-top: 220px;
+    }
+}
+
+@media screen and (max-height: 860px) {
+    .promoImage {
+        margin-top: -35px;
+    }
+
+    .content button {
+        margin-top: 200px;
+    }
+}

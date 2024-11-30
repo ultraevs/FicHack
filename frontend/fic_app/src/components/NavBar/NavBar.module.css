@@ -1,0 +1,8 @@
+.nav button:not(:last-child) {
+    margin-right: 30px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+}

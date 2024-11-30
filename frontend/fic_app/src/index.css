@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1500px;
+  padding: 0 30px;
+  margin: 0 auto;
+}
+
+
+@font-face {
+  font-family: 'Grandis Extended';
+  src: url('GrandisExtended-Medium.eot');
+  src: local('Grandis Extended Medium'), local('GrandisExtended-Medium'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Medium.eot') format('embedded-opentype'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Medium.woff2') format('woff2'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Medium.woff') format('woff'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Grandis Extended';
+  src: url('GrandisExtended-Bold.eot');
+  src: local('Grandis Extended Bold'), local('GrandisExtended-Bold'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Bold.eot') format('embedded-opentype'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Bold.woff2') format('woff2'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Bold.woff') format('woff'),
+    url('./assets/fonts/GrandisExtended/GrandisExtended-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  font-family: "Manrope", sans-serif;
+  font-size: 20px;
+  height: 100vh;
+}
+
+button {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}

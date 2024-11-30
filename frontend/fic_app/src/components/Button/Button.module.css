@@ -1,0 +1,35 @@
+.button.default {
+    display: inline-block;
+    padding: 15px 30px;
+    font-family: "Grandis Extended", sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+    background: #0B68EF;
+    border: 1px solid #0B68EF;
+    transition: all .5s ease;
+
+    &:hover {
+        background: #fff;
+        color: #0B68EF;
+        transition: all .5s ease;
+    }
+}
+
+.button.ghost {
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: #000;
+    transition: all .5s ease;
+    opacity: 0.5;
+
+    &.active {
+        opacity: 1;
+    }
+
+    &:hover {
+        opacity: 0.75;
+        transition: all .5s ease;
+    }
+}
