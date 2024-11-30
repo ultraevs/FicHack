@@ -1,8 +1,9 @@
+import base64
 from fastapi import FastAPI, HTTPException, Depends, Cookie, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 import bcrypt
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -10,7 +11,10 @@ from contextlib import asynccontextmanager
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import cv2
+import numpy as np
 from dotenv import load_dotenv
+from ml.module import Detector
 load_dotenv()
 
 
@@ -93,6 +97,9 @@ class User(BaseModel):
 class Base64Payload(BaseModel):
     data: str
 
+class MultipleBase64Payload(BaseModel):
+    data: List[str]
+
 @app.post("/register/")
 def register(user: User):
     conn = get_db_connection()
@@ -131,12 +138,8 @@ def login(credentials: HTTPBasicCredentials):
         conn.close()
 
 @app.post("/process_base64/")
-async def process_base64(payload: Base64Payload, user_id: Optional[str] = Cookie(None)):
-    mock_data = {
-        "pole_type": "Стальной столб",
-        "confidence": 0.95,
-        "additional_info": "Пример описания результата модели"
-    }
+async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optional[str] = Cookie(None)):
+    results = []
 
     if user_id:
         try:
@@ -148,35 +151,23 @@ async def process_base64(payload: Base64Payload, user_id: Optional[str] = Cookie
                 if not user:
                     raise HTTPException(status_code=404, detail="User not found")
 
-                cur.execute(
-                    """
-                    INSERT INTO files (id, file_name, spore_class, photo_base64, created_at, user_id)
-                    VALUES (DEFAULT, %s, %s, %s, DEFAULT, %s)
-                    """,
-                    (
-                        "mock_file_name.jpg",
-                        mock_data["pole_type"],
-                        payload.data,
-                        user_id
-                    )
-                )
-                conn.commit()
+                for index, base64_data in enumerate(payload.data):
+                    try:
+                        detector = Detector()
+                        img = process_base64_image(base64_data)
+                        result = detector.work(img)
 
-                return {
-                    "received_data": payload.data,
-                    "user_id": user_id,
-                    "username": user["username"],
-                    "mock_result": mock_data
-                }
+                        results.append(result)
+                    except ValueError as e:
+                            results.append({"error": str(e), "index": index})
+
+            return results
+
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Database error: {e}")
         finally:
             conn.close()
-    else:
-        return {
-            "received_data": payload.data,
-            "mock_result": mock_data
-        }
+
 
 
 @app.get("/user_history/")
@@ -206,3 +197,23 @@ async def get_user_history(user_id: Optional[str] = Cookie(None)):
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
     finally:
         conn.close()
+
+
+def process_base64_image(base64_string):
+    try:
+        if "," in base64_string:
+            base64_string = base64_string.split(",")[1]
+
+        image_data = base64.b64decode(base64_string)
+
+        np_array = np.frombuffer(image_data, np.uint8)
+
+        img = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
+
+        if img is None:
+            raise ValueError("Could not decode image from base64 string.")
+
+        return img
+
+    except Exception as e:
+        raise ValueError(f"Error processing base64 image: {e}")
