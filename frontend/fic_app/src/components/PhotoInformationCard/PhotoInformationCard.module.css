@@ -1,0 +1,17 @@
+.emptyCard {
+    border-radius: 12px;
+    border: 1px solid #DADADA;
+    max-width: 470px;
+    width: 100%;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    max-height: 534px;
+    height: 100%;
+    padding: 230px 15px 50px;
+    justify-content: space-between;
+    text-align: center;
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.4);
+}

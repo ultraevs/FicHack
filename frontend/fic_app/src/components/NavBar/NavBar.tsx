@@ -1,7 +1,9 @@
 import Button from "../Button/Button";
 import classes from "./NavBar.module.css";
+import { usePage } from "../../Contexts/PageContext/PageContext";
+import { Page } from "../../Contexts/PageContext/PageContext";
 
-const data: string[] = ["MAIN", "INTERFACE", "PHOTOS", "HISTORY", "LOGIN"];
+const data: Page[] = ["MAIN", "INTERFACE", "PHOTOS", "HISTORY", "LOGIN"];
 
 enum Menu {
     "MAIN" = "Главная",
@@ -12,7 +14,7 @@ enum Menu {
 }
 
 const NavBar = () => {
-    const currentPage = "MAIN";
+    const { currentPage, setCurrentPage } = usePage();
     return (
         <nav className={classes.nav}>
             {data.map((item, i) => (
@@ -21,6 +23,7 @@ const NavBar = () => {
                     text={Menu[item as keyof typeof Menu]}
                     isActive={currentPage == item ? true : false}
                     theme="ghost"
+                    onClick={() => setCurrentPage(item)}
                 />
             ))}
         </nav>

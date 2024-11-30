@@ -8,6 +8,9 @@
   margin: 0 auto;
 }
 
+#root {
+  height: 100vh;
+}
 
 @font-face {
   font-family: 'Grandis Extended';

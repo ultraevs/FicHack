@@ -1,7 +1,9 @@
 import classes from "./MainPage.module.css";
-import promoImage from "../../assets/images/promo-image.png";
-import Button from "../Button/Button";
+import promoImage from "../assets/images/promo-image.png";
+import Button from "../components/Button/Button";
+import { usePage } from "../Contexts/PageContext/PageContext";
 const MainPage = () => {
+    const setCurrentPage = usePage().setCurrentPage;
     return (
         <section className={classes.mainPage}>
             <div className="container">
@@ -19,7 +21,10 @@ const MainPage = () => {
                                 Иван, Ломаев Илья, Таланцев Глеб, Евсеев Михаил
                             </span>
                         </div>
-                        <Button text="К интерфейсу" />
+                        <Button
+                            text="К интерфейсу"
+                            onClick={() => setCurrentPage("INTERFACE")}
+                        />
                     </div>
                     <img
                         className={classes.promoImage}
