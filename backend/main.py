@@ -8,6 +8,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from contextlib import asynccontextmanager
 from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -75,7 +76,13 @@ def extract_user_id_from_token(token: str) -> int:
     raise ValueError("Invalid token format")
 
 app.add_middleware(AuthTokenMiddleware)
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], 
+    allow_credentials=True,                
+    allow_methods=["*"],                     
+    allow_headers=["*"],                     
+)
 
 security = HTTPBasic()
 
