@@ -1,3 +1,8 @@
 fastapi
 pydantic
 uvicorn
+psycopg2-binary
+bcrypt
+python-multipart
+starlette
+python-dotenv
