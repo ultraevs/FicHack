@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import classes from "./Button.module.css";
 
 type Theme = "ghost" | "default";
@@ -8,6 +8,7 @@ interface ButtonProps {
     isActive?: boolean;
     theme?: Theme;
     onClick?: (event?: React.MouseEvent<HTMLButtonElement>) => void;
+    children?: ReactNode;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -15,6 +16,7 @@ const Button: FC<ButtonProps> = ({
     isActive,
     theme = "default",
     onClick,
+    children,
 }) => {
     const buttonClass = `${classes.button} ${isActive ? classes.active : ""} ${
         classes[theme]
@@ -22,6 +24,7 @@ const Button: FC<ButtonProps> = ({
     return (
         <button type="button" className={buttonClass} onClick={onClick}>
             {text}
+            {children}
         </button>
     );
 };

@@ -2,7 +2,7 @@ import { FC } from "react";
 import classes from "./PhotoInformationCard.module.css";
 import lockIcon from "../../assets/images/lock-keyhole.svg";
 
-interface PhotoInformationCardProps {
+export interface PhotoInformationCardProps {
     classOfSupport: string;
     ID: number;
     conf: number;
@@ -14,11 +14,32 @@ type Props = PhotoInformationCardProps | null;
 const PhotoInformationCard: FC<{ props: Props }> = ({ props }) => {
     if (props) {
         return (
-            <div className={classes.card}>
-                <span>{`Класс опоры: ${props.classOfSupport}`}</span>
-                <span>{`ID: ${props.ID}`}</span>
-                <span>{`Ср. уверенность: ${props.conf}`}</span>
-                <span>{`Time Taken: ${props.time_taken}`}</span>
+            <div className={classes.cardWrapper}>
+                <div className={`${classes.cardInfo} ${classes.cardItem}`}>
+                    <div className={classes.cardInfoWrapper}>
+                        <h3>Класс опоры</h3>
+                        <span>{props.classOfSupport}</span>
+                    </div>
+                    <div className={classes.cardInfoWrapper}>
+                        <h3>ID</h3>
+                        <span>{props.ID}</span>
+                    </div>
+                    <div className={classes.cardInfoWrapper}>
+                        <h3>Ср. уверенность</h3>
+                        <span>{props.conf}</span>
+                    </div>
+                    <div className={classes.cardInfoWrapper}>
+                        <h3>Time taken</h3>
+                        <span>{props.time_taken}ms</span>
+                    </div>
+                </div>
+                <div className={`${classes.cardModes} ${classes.cardItem}`}>
+                    <h3>Режимы разметки</h3>
+                    <span>
+                        Слайдер, разметка прямоугольниками, разметка с
+                        подписями,стоковое фото
+                    </span>
+                </div>
             </div>
         );
     }
