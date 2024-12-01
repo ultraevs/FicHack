@@ -49,7 +49,9 @@ async def lifespan(app: FastAPI):
                     file_name TEXT NOT NULL,
                     spore_class TEXT,
                     photo_base64 TEXT,
-                    created_at TIMESTAMP DEFAULT NOW()
+                    created_at TIMESTAMP DEFAULT NOW(),
+                    time_taken TEXT NOT NULL,
+                    avg_conf TEXT NOT NULL
                 );
             """)
             conn.commit()
@@ -153,7 +155,7 @@ def make_json_serializable(obj):
         return obj
 
 @app.post("/process_base64/")
-async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optional[str] = Cookie(None)):
+async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optional[str] = Cookie(None), file_name: str = None):
     results = []
     if user_id:
         try:
@@ -164,7 +166,6 @@ async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optio
 
                 if not user:
                     raise HTTPException(status_code=404, detail="User not found")
-
                 for index, base64_data in enumerate(payload.data):
                     try:
                         detector = Detector()
@@ -173,6 +174,21 @@ async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optio
                         result["images"] = [cv2_to_base64(img) for img in result["images"]]
                         logging.debug(f"Result for index {index}: {result}")
                         result = make_json_serializable(result)
+                        cur.execute(
+                            """
+                            INSERT INTO files (id, file_name, spore_class, photo_base64, created_at, user_id, time_taken, avg_conf)
+                            VALUES (DEFAULT, %s, %s, %s, DEFAULT, %s, %s, %s)
+                            """,
+                            (
+                                file_name,
+                                result["objects"],
+                                result["images"],
+                                user_id,
+                                result["time_taken"],
+                                result["avg_conf"]
+                            )
+                        )
+                        conn.commit()
                         results.append(result)
                     except ValueError as e:
                         logging.error(f"Error processing image at index {index}: {e}")
@@ -199,6 +215,36 @@ async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optio
         return {"results": results}
 
 
+@app.get("/photo/{photo_id}/")
+async def get_photo_details(photo_id: int):
+    try:
+        conn = get_db_connection()
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT file_name, spore_class, photo_base64, avg_conf, time_taken
+                FROM files
+                WHERE id = %s
+                """,
+                (photo_id,)
+            )
+            record = cur.fetchone()
+
+            if not record:
+                raise HTTPException(status_code=404, detail="Photo not found")
+
+            return {
+                "file_name": record["file_name"], 
+                "spore_class": record["spore_class"], 
+                "photo_base64": record["photo_base64"], 
+                "avg_conf": record["avg_conf"], 
+                "time_taken": record["time_taken"], 
+                }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {e}")
+    finally:
+        conn.close()
 
 @app.get("/user_history/")
 async def get_user_history(user_id: Optional[str] = Cookie(None)):
