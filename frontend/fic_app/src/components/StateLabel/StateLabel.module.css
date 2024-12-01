@@ -1,0 +1,36 @@
+.label {
+    padding: 0 5px;
+    display: flex !important;
+    max-width: 100px;
+    align-items: center;
+    font-family: "Inted", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+
+    &::before {
+        content: "";
+        display: block;
+        width: 24px;
+        height: 24px;
+        margin-right: 5px;
+    }
+}
+
+.successLabel {
+    background-color: #EBFFF1;
+    color: #119C2B !important;
+
+    &::before {
+        background: url(../../assets/images/successIcon.svg) no-repeat center center;
+    }
+}
+
+.errorLabel {
+    background-color: #FFEBEB;
+    color: #9C1111 !important;
+
+    &::before {
+        background: url(../../assets/images/errorIcon.svg) no-repeat center center;
+    }
+}
