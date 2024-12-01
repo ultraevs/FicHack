@@ -286,7 +286,6 @@ async def process_multiple_base64(
                         result["images"] = [cv2_to_base64(image) for image in result["images"]]
                         logging.debug(f"Result for index {index}: {result}")
                         result_serializable = make_json_serializable(result)
-                        print(result_serializable)
 
                         # Insert the processed file details into the database
                         cur.execute(
