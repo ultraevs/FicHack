@@ -1,14 +1,40 @@
-version: "3.3"
+version: '3.8'
 
 services:
-  fic-python-backend:
-    build:
-      context: ../backend/
-      dockerfile: Dockerfile
-    restart: always
+  postgres:
+    image: postgres:14
+    container_name: postgres
     environment:
-      - DOCKER_MODE=1
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    env_file:
+      - .env
+    depends_on:
+      - postgres
     ports:
       - "8100:8100"
-    network_mode: host
-    
+  frontend:
+    build:
+      context: ./frontend/fic_app
+      dockerfile: Dockerfile
+    container_name: frontend/fic_app
+    env_file:
+      - .env
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
