@@ -84,6 +84,7 @@ class Detector:
             class_colors = []
 
         preprocessed_img, scale, top, left = self.preprocess_image(img)
+        empty = preprocessed_img.copy()
 
         if result:
             adjusted_boxes = self.adjust_boxes(result, scale, top, left, img.shape[1], img.shape[0])
@@ -110,11 +111,17 @@ class Detector:
         time_taken = int((time.time() - start_time) * 1000)
 
         return {
-            'images': [boxes_img, boxes_with_classes, boxes_with_classes_and_conf],
+            'images': [
+                boxes_img,
+                boxes_with_classes,
+                boxes_with_classes_and_conf,
+                empty
+            ],
             'avg-conf': f"{avg_conf:.2f}",
             'time-taken': f"{time_taken}ms",
-            'objects': objects_str  # **Modified Here**
+            'objects': objects_str
         }
+
 
     def draw_boxes(self, img, boxes, class_colors):
         for x1, y1, x2, y2, cls, _ in boxes:
@@ -134,7 +141,7 @@ class Detector:
         draw = ImageDraw.Draw(img_pil)
 
         try:
-            font = ImageFont.truetype("tilda-sans_light.ttf", 20)
+            font = ImageFont.truetype("./ml/tilda-sans_light.ttf", 20)
         except IOError:
             font = ImageFont.load_default()
 
@@ -197,12 +204,13 @@ class Detector:
 # if __name__ == "__main__":
 #     detector = Detector()
 
-#     img_path = './test/air2.jpg'
+#     img_path = 'tests/air1.png'
 #     img = cv2.imread(img_path)
 #     result = detector.work(img)
 
-#     cv2.imwrite('./output/boxes.jpg', result['images'][0])
-#     cv2.imwrite('./output/boxes_with_classes.jpg', result['images'][1])
-#     cv2.imwrite('./output/boxes_with_classes_and_conf.jpg', result['images'][2])
+#     cv2.imwrite('output/boxes.jpg', result['images'][0])
+#     cv2.imwrite('output/boxes_with_classes.jpg', result['images'][1])
+#     cv2.imwrite('output/boxes_with_classes_and_conf.jpg', result['images'][2])
+#     cv2.imwrite('output/empty.jpg', result['images'][3])
 
 #     # print(result)
