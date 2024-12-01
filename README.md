@@ -66,7 +66,7 @@
 ## Запуск решения
 Необходимо создать .env файлы в папках go-backend и python-backend, в которых должны содержаться ваши данные о сервере,базе данных и почтовом аккаунте. Также в вашем nginx и postgresql на сервере нужно указать те же порты что и в коде(местами из .env)
 ```sh
-    cd GagarinHack/deployment
+    cd FicHack/deployment
     docker-compose build
     docker-compose up -d
 ```
