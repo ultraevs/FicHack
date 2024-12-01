@@ -64,7 +64,15 @@
 - https://app.roboflow.com/cocucku13/ground-lines
 
 ## Запуск решения
-Необходимо создать .env файл в папке deployment, в которых должны содержаться ваши данные о базе данных. Также в вашем nginx и postgresql на сервере нужно указать те же порты что и в коде(местами из .env)
+Необходимо создать .env файл формата
+```sh
+    DB_NAME=postgres
+    DB_USER=postgres
+    DB_PASSWORD=1234
+    DB_HOST=77.37.181.114
+    DB_PORT=5432
+```
+в папке deployment, в которых должны содержаться ваши данные о базе данных. Также в вашем nginx и postgresql на сервере нужно указать те же порты что и в коде(местами из .env)
 ```sh
     cd FicHack/deployment
     docker-compose build
