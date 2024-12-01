@@ -7,9 +7,9 @@ from collections import Counter
 
 class Detector:
     def __init__(self):
-        self.classificator = YOLO('./models/classify-train3.pt')
-        self.ground_detector = YOLO('./models/ground-train4.pt')
-        self.air_detector = YOLO('./models/air-train8.pt')
+        self.classificator = YOLO('ml/models/classify-train3.pt')
+        self.ground_detector = YOLO('ml/models/ground-train4.pt')
+        self.air_detector = YOLO('ml/models/air-train8.pt')
         
         self.class_names_ground = ['Другая', 'Рюмка', 'Башенная']
         self.class_names_air = ['Другая', 'Рюмка', 'Башенная']
@@ -194,15 +194,15 @@ class Detector:
         return img
 
     
-if __name__ == "__main__":
-    detector = Detector()
+# if __name__ == "__main__":
+#     detector = Detector()
 
-    img_path = './test/air2.jpg'
-    img = cv2.imread(img_path)
-    result = detector.work(img)
+#     img_path = './test/air2.jpg'
+#     img = cv2.imread(img_path)
+#     result = detector.work(img)
 
-    cv2.imwrite('./output/boxes.jpg', result['images'][0])
-    cv2.imwrite('./output/boxes_with_classes.jpg', result['images'][1])
-    cv2.imwrite('./output/boxes_with_classes_and_conf.jpg', result['images'][2])
+#     cv2.imwrite('./output/boxes.jpg', result['images'][0])
+#     cv2.imwrite('./output/boxes_with_classes.jpg', result['images'][1])
+#     cv2.imwrite('./output/boxes_with_classes_and_conf.jpg', result['images'][2])
 
-    # print(result)
+#     # print(result)

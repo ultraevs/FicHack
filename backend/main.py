@@ -1,4 +1,6 @@
 import base64
+import json
+import logging
 from fastapi import FastAPI, HTTPException, Depends, Cookie, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -70,7 +72,6 @@ class AuthTokenMiddleware(BaseHTTPMiddleware):
                 raise HTTPException(status_code=400, detail="Invalid user_id")
         else:
             request.state.user_id = None
-
         response = await call_next(request)
         return response
 
@@ -137,10 +138,23 @@ def login(credentials: HTTPBasicCredentials):
     finally:
         conn.close()
 
+def make_json_serializable(obj):
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, np.generic):
+        return obj.item()
+    elif isinstance(obj, dict):
+        return {k: make_json_serializable(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [make_json_serializable(item) for item in obj]
+    elif isinstance(obj, tuple):
+        return tuple(make_json_serializable(item) for item in obj)
+    else:
+        return obj
+
 @app.post("/process_base64/")
 async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optional[str] = Cookie(None)):
     results = []
-
     if user_id:
         try:
             conn = get_db_connection()
@@ -156,17 +170,21 @@ async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optio
                         detector = Detector()
                         img = process_base64_image(base64_data)
                         result = detector.work(img)
-
+                        result["images"] = [cv2_to_base64(img) for img in result["images"]]
+                        logging.debug(f"Result for index {index}: {result}")
+                        result = make_json_serializable(result)
                         results.append(result)
                     except ValueError as e:
-                            results.append({"error": str(e), "index": index})
-
-            return results
+                        logging.error(f"Error processing image at index {index}: {e}")
+                        results.append({"error": str(e), "index": index})
+            return {"results": results}
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Database error: {e}")
         finally:
             conn.close()
+    else:
+        raise HTTPException(status_code=401, detail="Not authenticated")
 
 
 
@@ -217,3 +235,8 @@ def process_base64_image(base64_string):
 
     except Exception as e:
         raise ValueError(f"Error processing base64 image: {e}")
+    
+def cv2_to_base64(img):
+    _, buffer = cv2.imencode('.jpg', img)
+    img_str = base64.b64encode(buffer).decode('utf-8')
+    return img_str
