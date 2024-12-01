@@ -184,7 +184,19 @@ async def process_multiple_base64(payload: MultipleBase64Payload, user_id: Optio
         finally:
             conn.close()
     else:
-        raise HTTPException(status_code=401, detail="Not authenticated")
+        for index, base64_data in enumerate(payload.data):
+                    try:
+                        detector = Detector()
+                        img = process_base64_image(base64_data)
+                        result = detector.work(img)
+                        result["images"] = [cv2_to_base64(img) for img in result["images"]]
+                        logging.debug(f"Result for index {index}: {result}")
+                        result = make_json_serializable(result)
+                        results.append(result)
+                    except ValueError as e:
+                        logging.error(f"Error processing image at index {index}: {e}")
+                        results.append({"error": str(e), "index": index})
+        return {"results": results}
 
 
 
