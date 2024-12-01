@@ -3,6 +3,8 @@ import Header from "./components/Header/Header";
 import MainPage from "./MainPage/MainPage";
 import { usePage } from "./Contexts/PageContext/PageContext";
 import InterfacePage from "./InterfacePage/InterfacePage";
+import LotsOfPhotosPage from "./LotsOfPhotosPage/LotsOfPhotosPage";
+
 function App() {
     const pageContext = usePage();
     const renderPage = () => {
@@ -11,8 +13,8 @@ function App() {
                 return <MainPage />;
             case "INTERFACE":
                 return <InterfacePage />;
-            // case "PHOTOS":
-            //     return <PhotosPage />;
+            case "PHOTOS":
+                return <LotsOfPhotosPage />;
             // case "HISTORY":
             //     return <HistoryPage />;
             // case "LOGIN":

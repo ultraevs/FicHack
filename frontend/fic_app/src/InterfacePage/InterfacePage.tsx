@@ -11,7 +11,6 @@ import { useTab } from "../Contexts/TabsContext/TabsContext";
 type Image = string;
 
 const InterfacePage = () => {
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [photoInformationProps, setPhotoInformationProps] =
         useState<PhotoInformationCardProps | null>(null);
     const [imagesList, setImagesList] = useState<Image[] | null>(null);
@@ -45,8 +44,6 @@ const InterfacePage = () => {
                         );
                         setImagesList(data.results[0].images);
                     }
-
-                    setImagePreview(base64data);
                 } catch (error) {
                     console.error("Ошибка при получении данных:", error);
                 }
@@ -62,7 +59,7 @@ const InterfacePage = () => {
             case "COMPARE":
                 return (
                     <ImagesCompareSlider
-                        leftImage={imagePreview!}
+                        leftImage={`data:image/png;base64, ${images[3]}`}
                         rightImage={`data:image/png;base64, ${images[0]}`}
                     />
                 );
@@ -93,8 +90,8 @@ const InterfacePage = () => {
             default:
                 return (
                     <ImagesCompareSlider
-                        leftImage={imagePreview!}
-                        rightImage={imagePreview!}
+                        leftImage={`data:image/png;base64, ${images[3]}`}
+                        rightImage={`data:image/png;base64, ${images[0]}`}
                     />
                 );
         }
@@ -114,10 +111,14 @@ const InterfacePage = () => {
                         {({ getRootProps, getInputProps }) => (
                             <div className={classes.getPhotoWrapper}>
                                 <div
-                                    className={classes.getPhotoBlock}
+                                    className={`${classes.getPhotoBlock} ${
+                                        imagesList
+                                            ? classes.getPhotoBlockWithoutBG
+                                            : ""
+                                    }`}
                                     {...getRootProps()}
                                 >
-                                    {imagePreview
+                                    {imagesList
                                         ? renderTabContent(imagesList || [])
                                         : "Перетащите изображение сюда"}
                                 </div>
@@ -128,12 +129,12 @@ const InterfacePage = () => {
                                 />
                                 <Button
                                     text={
-                                        imagePreview
+                                        imagesList
                                             ? "Сбросить"
                                             : "+ Добавить фото"
                                     }
                                     onClick={() =>
-                                        imagePreview
+                                        imagesList
                                             ? resetState()
                                             : fileInputRef.current?.click()
                                     }
@@ -148,7 +149,7 @@ const InterfacePage = () => {
     );
 
     function resetState() {
-        setImagePreview(null);
+        setImagesList(null);
         setPhotoInformationProps(null);
         setImagesList(null);
     }

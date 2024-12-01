@@ -8,7 +8,7 @@ export interface PhotoInformationCardProps {
     objects: string;
     ID: number;
     "avg-conf": number;
-    "time-taken": number;
+    "time-taken": string;
 }
 
 type Props = PhotoInformationCardProps | null;
@@ -33,7 +33,7 @@ const PhotoInformationCard: FC<{ props: Props }> = ({ props }) => {
                     </div>
                     <div className={classes.cardInfoWrapper}>
                         <h3>Time taken</h3>
-                        <span>{props["time-taken"]}ms</span>
+                        <span>{props["time-taken"]}</span>
                     </div>
                 </div>
                 <div className={`${classes.cardModes} ${classes.cardItem}`}>

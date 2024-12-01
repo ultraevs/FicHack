@@ -16,9 +16,6 @@ const ImagesCompareSlider: FC<ImagesCompareSliderProps> = ({
             rightImage={rightImage}
             handle={<React.Fragment />}
             sliderLineWidth={8}
-            leftImageCss={{
-                filter: "brightness(50%)",
-            }}
         />
     );
 };

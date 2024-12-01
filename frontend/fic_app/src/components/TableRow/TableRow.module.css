@@ -1,0 +1,10 @@
+.headRow {
+    width: 100%;
+    background: #FAFAFA;
+    display: grid;
+    grid-template-columns: 0.18fr 0.35fr 0.35fr 0.12fr;
+
+    span {
+        display: block;
+    }
+}

@@ -1,0 +1,22 @@
+.LotsOfPhotosPage {
+    margin-top: 30px;
+}
+
+.textBlock {
+    h3 {
+        font-size: 20px;
+        font-family: "Grandis Extended", sans-serif;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    span {
+        font-size: 20px;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.8);
+    }
+}
+
+.tableWrapper {
+    margin-top: 32px;
+}
