@@ -1,6 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-export type Page = "MAIN" | "INTERFACE" | "PHOTOS" | "HISTORY" | "LOGIN";
+export type Page =
+    | "MAIN"
+    | "INTERFACE"
+    | "PHOTOS"
+    | "HISTORY"
+    | "LOGIN"
+    | "LOGOUT"
+    | "REGISTER";
 
 interface PageContextType {
     currentPage: Page;

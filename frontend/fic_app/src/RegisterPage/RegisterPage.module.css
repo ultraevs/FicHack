@@ -1,0 +1,42 @@
+.form {
+    max-width: 530px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+
+    input {
+        width: 100%;
+        border: 1px solid #E4E4E7;
+        border-radius: 9px;
+        height: 65px;
+        text-align: center;
+
+        &:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    }
+
+    button {
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    span {
+        color: #737373;
+        font-size: 14px;
+    }
+}
+
+.enterButton {
+    display: inline;
+    width: auto !important;
+    color: #0B68EF;
+    font-size: 14px;
+    transition: all .5s ease;
+
+    &:hover {
+        color: #0049b7;
+    }
+}

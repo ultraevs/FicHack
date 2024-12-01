@@ -21,7 +21,11 @@ const PhotoInformationCard: FC<{ props: Props }> = ({ props }) => {
                 <div className={`${classes.cardInfo} ${classes.cardItem}`}>
                     <div className={classes.cardInfoWrapper}>
                         <h3>Класс опоры</h3>
-                        <span>{props.objects}</span>
+                        <span>
+                            {props.objects.length > 0
+                                ? props.objects
+                                : "Не распознано"}
+                        </span>
                     </div>
                     <div className={classes.cardInfoWrapper}>
                         <h3>ID</h3>

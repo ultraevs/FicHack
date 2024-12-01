@@ -7,13 +7,14 @@ import ImagesCompareSlider from "../components/ImagesCompareSlider/ImagesCompare
 import { PhotoInformationCardProps } from "../components/PhotoInformationCard/PhotoInformationCard";
 import { fetchInfo } from "../Requests/getInfo";
 import { useTab } from "../Contexts/TabsContext/TabsContext";
-
+import "../components/StateLabel/StateLabelLoadingStyles.css";
 type Image = string;
 
 const InterfacePage = () => {
     const [photoInformationProps, setPhotoInformationProps] =
         useState<PhotoInformationCardProps | null>(null);
     const [imagesList, setImagesList] = useState<Image[] | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const { currentTab } = useTab();
 
@@ -24,14 +25,14 @@ const InterfacePage = () => {
             );
             return;
         }
-
+        setIsLoading(true);
         const file = acceptedFiles[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = async () => {
                 try {
                     const base64data = reader.result as string;
-                    const data = await fetchInfo(base64data);
+                    const data = await fetchInfo(base64data, file.name);
 
                     if (
                         data &&
@@ -42,11 +43,13 @@ const InterfacePage = () => {
                             data
                                 .results[0] as unknown as PhotoInformationCardProps
                         );
+                        setIsLoading(false);
                         setImagesList(data.results[0].images);
                     }
                 } catch (error) {
                     console.error("Ошибка при получении данных:", error);
                 }
+                setIsLoading(false);
             };
             reader.onerror = () => console.error("Ошибка при чтении файла");
             reader.readAsDataURL(file);
@@ -118,9 +121,31 @@ const InterfacePage = () => {
                                     }`}
                                     {...getRootProps()}
                                 >
-                                    {imagesList
-                                        ? renderTabContent(imagesList || [])
-                                        : "Перетащите изображение сюда"}
+                                    <div
+                                        className={`spinnerWrapper ${
+                                            classes.spinner
+                                        } ${
+                                            isLoading && classes.spinnerActive
+                                        }`}
+                                    >
+                                        <div
+                                            id="loading-bar-spinner"
+                                            className="spinner"
+                                        >
+                                            <div className="spinner-icon"></div>
+                                        </div>
+                                    </div>
+                                    {imagesList ? (
+                                        renderTabContent(imagesList || [])
+                                    ) : (
+                                        <span
+                                            className={`${
+                                                isLoading && classes.hidden
+                                            }`}
+                                        >
+                                            Перетащите изображение сюда
+                                        </span>
+                                    )}
                                 </div>
                                 <input
                                     {...getInputProps()}

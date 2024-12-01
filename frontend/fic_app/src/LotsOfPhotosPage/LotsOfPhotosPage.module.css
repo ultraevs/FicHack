@@ -35,7 +35,10 @@
 
     span {
         font-size: 20px;
-        font-weight: 500;
-        opacity: 0.5;
+        font-weight: 400;
+        opacity: 0.4;
+        color: rgba(0, 0, 0, 0.4);
     }
+
+    cursor: pointer;
 }

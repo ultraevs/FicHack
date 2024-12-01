@@ -27,22 +27,33 @@ const LotsOfPhotosPage = () => {
             reader.onloadend = async () => {
                 try {
                     const base64data = reader.result as string;
-                    const data = await fetchInfo(base64data);
+                    const data = await fetchInfo(base64data, file.name);
 
                     setRawsData((prevRawsData) => {
                         const updatedRawsData = new Map(prevRawsData);
                         const formattedData = data?.results[0];
-                        console.log("FORMATTED: ", data?.results);
                         try {
-                            updatedRawsData.set(i, {
-                                state: "SUCCESS",
-                                nameOfFile: file.name,
-                                data: {
-                                    avgConf: formattedData["avg-conf"],
-                                    objects: formattedData.objects,
-                                    timeTaken: formattedData["time-taken"],
-                                },
-                            });
+                            if (formattedData.objects.length < 1) {
+                                updatedRawsData.set(i, {
+                                    state: "ERROR",
+                                    nameOfFile: file.name,
+                                    data: {
+                                        avgConf: -1,
+                                        objects: "Не распознано",
+                                        timeTaken: -1,
+                                    },
+                                });
+                            } else {
+                                updatedRawsData.set(i, {
+                                    state: "SUCCESS",
+                                    nameOfFile: file.name,
+                                    data: {
+                                        avgConf: formattedData["avg-conf"],
+                                        objects: formattedData.objects,
+                                        timeTaken: formattedData["time-taken"],
+                                    },
+                                });
+                            }
                         } catch {
                             updatedRawsData.set(i, {
                                 state: "ERROR",

@@ -31,3 +31,21 @@
         font-weight: 500;
     }
 }
+
+.withDeleteRow {
+    width: 100%;
+    background: #FAFAFA;
+    display: grid;
+    grid-template-columns: 0.08fr 0.1fr 0.35fr 0.35fr 0.08fr 0.04fr;
+    padding: 8px 20px;
+    border-bottom: 1px solid #E5E9EB;
+    min-height: 40px;
+
+    span {
+        display: flex;
+        align-items: center;
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+    }
+}
