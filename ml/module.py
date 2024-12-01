@@ -9,10 +9,10 @@ class Detector:
     def __init__(self):
         self.classificator = YOLO('./models/classify-train3.pt')
         self.ground_detector = YOLO('./models/ground-train4.pt')
-        self.air_detector = YOLO('./models/air-train0.pt')
+        self.air_detector = YOLO('./models/air-train8.pt')
         
         self.class_names_ground = ['Другая', 'Рюмка', 'Башенная']
-        self.class_names_air = ['Class 1', 'Class 2', 'Class 3', 'Class 4']
+        self.class_names_air = ['Другая', 'Рюмка', 'Башенная']
         
         self.colors_ground = [
             (74, 74, 252),   # other
@@ -20,10 +20,9 @@ class Detector:
             (0, 255, 0)      # tower-type
         ]
         self.colors_air = [
-            (74, 74, 252),    # Class 1
-            (255, 0, 0),      # Class 2
-            (0, 255, 0),      # Class 3
-            (0, 165, 255)     # Class 4
+            (74, 74, 252),   # other
+            (255, 0, 0),     # rumka
+            (0, 255, 0)      # tower-type
         ]
 
     def preprocess_image(self, img, target_size=(953, 536), corner_radius=12):
@@ -66,7 +65,7 @@ class Detector:
         start_time = time.time()
 
         r = self.classificator(img, save=False, verbose=False)
-        classname_probs = r[0].probs.top5conf.tolist()
+        classname_probs = r[0].probs.top5
         classname = "ground" if classname_probs[0] > classname_probs[1] else "air"
 
         if classname == "ground":
@@ -75,7 +74,7 @@ class Detector:
             class_names = self.class_names_ground
             class_colors = self.colors_ground
         elif classname == "air":
-            r = self.air_detector(img, save=False, verbose=False, conf=0.01)
+            r = self.air_detector(img, save=False, verbose=False, conf=0.25)
             result = r[0].boxes if r[0].boxes else []
             class_names = self.class_names_air
             class_colors = self.colors_air
@@ -198,7 +197,7 @@ class Detector:
 if __name__ == "__main__":
     detector = Detector()
 
-    img_path = './test/ground1.jpg'
+    img_path = './test/air2.jpg'
     img = cv2.imread(img_path)
     result = detector.work(img)
 
@@ -206,4 +205,4 @@ if __name__ == "__main__":
     cv2.imwrite('./output/boxes_with_classes.jpg', result['images'][1])
     cv2.imwrite('./output/boxes_with_classes_and_conf.jpg', result['images'][2])
 
-    print(result)
+    # print(result)
