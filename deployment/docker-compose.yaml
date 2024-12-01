@@ -1,13 +1,11 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:14
     container_name: postgres
     environment:
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -15,9 +13,9 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: fic-backend
     env_file:
       - .env
     depends_on:
@@ -26,9 +24,9 @@ services:
       - "8100:8100"
   frontend:
     build:
-      context: ./frontend/fic_app
+      context: ../frontend/fic_app
       dockerfile: Dockerfile
-    container_name: frontend/fic_app
+    container_name: fic-frontend
     env_file:
       - .env
     ports:
