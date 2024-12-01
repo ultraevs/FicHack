@@ -17,6 +17,7 @@ export interface TableRowProps {
     state: State;
     nameOfFile?: string;
     data?: RawsData;
+    id?: number;
 }
 
 const TableRow: FC<TableRowProps> = ({
@@ -25,6 +26,7 @@ const TableRow: FC<TableRowProps> = ({
     data,
     nameOfFile,
     isWithDelete,
+    id,
 }) => {
     function getFormattedDate(argDate?: string): string {
         let date;
@@ -84,7 +86,7 @@ const TableRow: FC<TableRowProps> = ({
     }
     return (
         <div className={classes.row}>
-            <span>ID 3210</span>
+            <span>ID {id}</span>
             <StateLabel state={state} />
             <span>{nameOfFile}</span>
             <span>{data?.objects}</span>

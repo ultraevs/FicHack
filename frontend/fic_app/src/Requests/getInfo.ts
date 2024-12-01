@@ -7,7 +7,7 @@ export const fetchInfo = async (
 ): Promise<{ results: PhotoInformationCardProps } | null> => {
     try {
         const response = await axios.post(
-            "http://localhost:8200/process_base64/",
+            "http://localhost:8000/process_base64/",
             {
                 data: [data_base64],
                 file_name: name,
@@ -27,7 +27,7 @@ export const fetchLogin = async (
 ): Promise<boolean> => {
     try {
         const response = await axios.post(
-            "http://localhost:8200/login/",
+            "http://localhost:8000/login/",
             {
                 username: login,
                 password: password,
@@ -53,7 +53,7 @@ export const fetchRegister = async (
 ): Promise<boolean> => {
     try {
         const response = await axios.post(
-            "http://localhost:8200/register/",
+            "http://localhost:8000/register/",
             {
                 username: login,
                 password: password,
@@ -74,16 +74,17 @@ export const fetchRegister = async (
     }
 };
 
-export const fetchHistory = async (): Promise<boolean> => {
+export const fetchHistory = async (editHistory): Promise<boolean> => {
     try {
         const response = await axios.get(
-            "http://localhost:8200/user_history/",
+            "http://localhost:8000/user_history/",
             {
                 withCredentials: true,
             }
         );
         if (response.status == 200) {
             console.log(response.data.history);
+            editHistory(response.data.history);
             return response.data.history;
         } else return false;
     } catch (error) {
