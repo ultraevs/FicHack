@@ -63,3 +63,12 @@
         line-height: auto;
     }
 }
+
+.buttonsWrapper {
+    display: flex;
+    align-items: center;
+
+    button:not(:last-child) {
+        margin-right: 15px;
+    }
+}

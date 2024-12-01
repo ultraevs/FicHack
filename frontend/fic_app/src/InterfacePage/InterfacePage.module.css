@@ -27,6 +27,10 @@
     span {
         opacity: 0.4;
     }
+
+    div {
+        height: 535px !important;
+    }
 }
 
 .imagePreview {
@@ -37,7 +41,6 @@
     border-radius: 12px;
     width: 100%;
     border-radius: 12px;
-    overflow: hidden;
 
     span {
         opacity: 0.4;
@@ -47,4 +50,9 @@
         width: 100%;
         height: 100%;
     }
+}
+
+.preview {
+    width: 100%;
+    height: 100%;
 }

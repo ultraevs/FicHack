@@ -1,7 +1,6 @@
 import Button from "../Button/Button";
 import classes from "./NavBar.module.css";
-import { usePage } from "../../Contexts/PageContext/PageContext";
-import { Page } from "../../Contexts/PageContext/PageContext";
+import { usePage, Page } from "../../Contexts/PageContext/PageContext";
 
 const data: Page[] = ["MAIN", "INTERFACE", "PHOTOS", "HISTORY", "LOGIN"];
 

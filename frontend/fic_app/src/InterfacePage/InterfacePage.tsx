@@ -5,19 +5,19 @@ import PhotoInformationCard from "../components/PhotoInformationCard/PhotoInform
 import classes from "./InterfacePage.module.css";
 import ImagesCompareSlider from "../components/ImagesCompareSlider/ImagesCompareSlider";
 import { PhotoInformationCardProps } from "../components/PhotoInformationCard/PhotoInformationCard";
-const InterfacePage = () => {
-    // УДАЛИТЬ ПОТОМ!!!
-    const testData = {
-        classOfSupport: "ЛЭП класс 1",
-        ID: 3201,
-        conf: 0.7,
-        time_taken: 100,
-    };
+import { fetchInfo } from "../Requests/getInfo";
+import { useTab } from "../Contexts/TabsContext/TabsContext";
 
+type Image = string;
+
+const InterfacePage = () => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [photoInformationProps, setPhotoInformationProps] =
         useState<PhotoInformationCardProps | null>(null);
+    const [imagesList, setImagesList] = useState<Image[] | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const { currentTab } = useTab();
+
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 1) {
             alert(
@@ -25,13 +25,80 @@ const InterfacePage = () => {
             );
             return;
         }
+
         const file = acceptedFiles[0];
         if (file) {
-            const previewUrl = URL.createObjectURL(file);
-            setImagePreview(previewUrl);
-            setPhotoInformationProps(testData);
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                try {
+                    const base64data = reader.result as string;
+                    const data = await fetchInfo(base64data);
+
+                    if (
+                        data &&
+                        Array.isArray(data.results) &&
+                        data.results.length > 0
+                    ) {
+                        setPhotoInformationProps(
+                            data
+                                .results[0] as unknown as PhotoInformationCardProps
+                        );
+                        setImagesList(data.results[0].images);
+                    }
+
+                    setImagePreview(base64data);
+                } catch (error) {
+                    console.error("Ошибка при получении данных:", error);
+                }
+            };
+            reader.onerror = () => console.error("Ошибка при чтении файла");
+            reader.readAsDataURL(file);
         }
     }, []);
+
+    const renderTabContent = (images: Image[]) => {
+        console.log(images);
+        switch (currentTab) {
+            case "COMPARE":
+                return (
+                    <ImagesCompareSlider
+                        leftImage={imagePreview!}
+                        rightImage={`data:image/png;base64, ${images[0]}`}
+                    />
+                );
+            case "RECTANGLES":
+                return (
+                    <img
+                        src={`data:image/png;base64, ${images[0]}`}
+                        className={classes.preview}
+                        alt="Rectangles"
+                    />
+                );
+            case "TEXT":
+                return (
+                    <img
+                        src={`data:image/png;base64, ${images[1]}`}
+                        className={classes.preview}
+                        alt="Text"
+                    />
+                );
+            case "STOCK":
+                return (
+                    <img
+                        src={`data:image/png;base64, ${images[2]}`}
+                        className={classes.preview}
+                        alt="Stock"
+                    />
+                );
+            default:
+                return (
+                    <ImagesCompareSlider
+                        leftImage={imagePreview!}
+                        rightImage={imagePreview!}
+                    />
+                );
+        }
+    };
 
     return (
         <section>
@@ -50,41 +117,27 @@ const InterfacePage = () => {
                                     className={classes.getPhotoBlock}
                                     {...getRootProps()}
                                 >
-                                    {imagePreview ? (
-                                        <div className={classes.imagePreview}>
-                                            <ImagesCompareSlider
-                                                leftImage={imagePreview}
-                                                rightImage={imagePreview}
-                                            />
-                                            {/* <img
-                                                src={imagePreview}
-                                                alt="Preview"
-                                            /> */}
-                                        </div>
-                                    ) : (
-                                        "Перетащите изображение сюда"
-                                    )}
+                                    {imagePreview
+                                        ? renderTabContent(imagesList || [])
+                                        : "Перетащите изображение сюда"}
                                 </div>
-
                                 <input
                                     {...getInputProps()}
                                     ref={fileInputRef}
                                     style={{ display: "none" }}
                                 />
-
-                                {imagePreview ? (
-                                    <Button
-                                        text="Сбросить"
-                                        onClick={() => setImagePreview(null)}
-                                    />
-                                ) : (
-                                    <Button
-                                        text="+ Добавить фото"
-                                        onClick={() =>
-                                            fileInputRef.current?.click()
-                                        }
-                                    />
-                                )}
+                                <Button
+                                    text={
+                                        imagePreview
+                                            ? "Сбросить"
+                                            : "+ Добавить фото"
+                                    }
+                                    onClick={() =>
+                                        imagePreview
+                                            ? resetState()
+                                            : fileInputRef.current?.click()
+                                    }
+                                />
                             </div>
                         )}
                     </Dropzone>
@@ -93,6 +146,12 @@ const InterfacePage = () => {
             </div>
         </section>
     );
+
+    function resetState() {
+        setImagePreview(null);
+        setPhotoInformationProps(null);
+        setImagesList(null);
+    }
 };
 
 export default InterfacePage;
