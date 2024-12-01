@@ -8,10 +8,10 @@
 ### Задача: Разработка модуля классификации опор ЛЭП
 
 ## Используемый стек технологий:
-- [Python-Backend](https://github.com/ultraevs/FicHack/tree/main/python-backend) - Реализован с использованием [Python](https://www.python.org/) и фреймворка [Fast-API](https://fastapi.tiangolo.com/ru/) - Задачей модуля является обеспечение взаимодействия бекенда сайта и cv модели.
-- [Frontend](https://github.com/ultraevs/FicHack/tree/main/frontend) - Реализован с использованием [React](https://ru.legacy.reactjs.org/). Задачай является предоставление красивого и функционалоного интерфейса для пользователя.
+- [Python-Backend](https://github.com/ultraevs/FicHack/tree/main/backend) - Реализован с использованием [Python](https://www.python.org/) и фреймворка [Fast-API](https://fastapi.tiangolo.com/ru/) - Задачей модуля является обеспечение взаимодействия бекенда сайта и cv модели.
+- [Frontend](https://github.com/ultraevs/FicHack/tree/main/frontend/fic-hack) - Реализован с использованием [React](https://ru.legacy.reactjs.org/). Задачай является предоставление красивого и функционалоного интерфейса для пользователя.
 - [Deployment](https://github.com/ultraevs/FicHack/tree/main/deployment) - Реализован с использованием [Docker-Compose](https://www.docker.com/). Задачей модуля является возможность быстрого и безошибочного развертывания приложения на любом сервере.
-- [CV](https://github.com/ultraevs/FicHack/tree/main/python-backend/cv) - Реализован с использованием [YOLOv8](https://docs.ultralytics.com/ru/models/yolov11/). Задачей модуля является распознавание типа документа на предоставленных фото пользователя.
+- [CV](https://github.com/ultraevs/FicHack/tree/main/backend/ml) - Реализован с использованием [YOLOv8](https://docs.ultralytics.com/ru/models/yolov11/). Задачей модуля является распознавание типа документа на предоставленных фото пользователя.
 
 ## Функционал решения
 
