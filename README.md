@@ -68,8 +68,8 @@
 ```sh
     DB_NAME=postgres
     DB_USER=postgres
-    DB_PASSWORD=1234
-    DB_HOST=77.37.181.114
+    DB_PASSWORD=pass
+    DB_HOST=ip
     DB_PORT=5432
 ```
 в папке deployment, в которых должны содержаться ваши данные о базе данных. Также в вашем nginx и postgresql на сервере нужно указать те же порты что и в коде(местами из .env)
