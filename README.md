@@ -4,6 +4,7 @@
 
 
 # [Ссылка на готовое решение](http://fic.shmyaks.ru/)
+# [Figma](https://www.figma.com/design/GlHiFhDimaiu0QXZdXPHJ8/fic-hack?node-id=27-2&t=IlNR9lbFcYyQI9D6-1)
 
 ### Задача: Разработка модуля классификации опор ЛЭП
 
